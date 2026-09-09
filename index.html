@@ -1340,10 +1340,6 @@
                         : event.type;
                     recordClipboardAttempt(index + 1, clipboardAction);
                 }
-                const status = document.getElementById('submit-status');
-                status.textContent = activeQuestionConfig.clipboardBlockedMessage ||
-                    '답변 칸에서는 복사 및 붙여넣기를 사용할 수 없습니다.';
-                status.className = 'submit-status error';
             }
 
             writtenAnswer.addEventListener('input', function () {

@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Organisation Surveys</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --page-top: #c7c7c7;
+            --page-bottom: #8d8d8d;
+            --card-bg: rgba(238, 238, 238, 0.82);
+            --card-border: transparent;
+            --input-bg: rgba(255, 255, 255, 0.62);
+            --text-main: #303030;
+            --text-muted: #777;
+            --line-color: #8a8a8a;
+            --button-bg: #565656;
+            --button-hover: #3f3f3f;
+        }
+
+        html,
+        body {
+            background: linear-gradient(180deg, var(--page-top) 0%, var(--page-bottom) 100%);
+            background-attachment: fixed;
+            text-align: center;
+            min-width: 300px;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-main);
+            font-family: Arial, "Malgun Gothic", sans-serif;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+        
+        #title {
+            margin: 30px 0 16px;
+            padding: 26px 20px;
+            border: 2px solid var(--card-border);
+            border-radius: 24px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(34px, 3vw, 48px);
+            box-shadow: 0 20px 45px rgba(50, 50, 50, 0.18);
+            backdrop-filter: blur(12px);
+        }
+
+        #description {
+            color: #f4f4f4;
+        }
+        
+        #form-outer {
+            width: 95%;
+            margin: 0 auto;
+            max-width: 1350px;
+        }
+        
+        .labels {
+            display: inline-block;
+            text-align: right;
+            width: 40%;
+            padding: 5px;
+            margin-top: 10px;
+            vertical-align: top;
+        }
+        
+        .rightTab {
+            display: inline-block;
+            text-align: left;
+            width: 45%;
+            vertical-align: middle;
+        }
+        
+        .rowTab {
+            margin: 10px;
+        }
+        
+        input[type=text],
+        input[type=number],
+        #dropdown {
+            width: auto;
+            padding: 12px;
+            margin: 3px 0;
+            box-sizing: border-box;
+            border: none;
+            border-bottom: 2px solid var(--line-color);
+            background: inherit;
+        }
+        
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+        
+        #box-inner,
+        .box-inner,
+        fieldset {
+            border: 2px solid var(--card-border);
+            border-radius: 14px;
+            background: var(--card-bg);
+            box-shadow: 0 20px 45px rgba(50, 50, 50, 0.18);
+            backdrop-filter: blur(12px);
+        }
+        
+        #box-inner,
+        .box-inner {
+            margin-top: 18px;
+            margin-bottom: 18px;
+        }
+        
+        .radio,
+        .checkbox {
+            display: block;
+            position: relative;
+            left: -40px;
+            margin-bottom: 10px;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        #comments {
+            height: 70px;
+            width: 100%;
+            resize: vertical;
+        }
+
+        .long-answer {
+            margin: 0;
+            padding: 14px;
+            text-align: left;
+        }
+
+        .long-answer label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            margin-left: 8px;
+            font-weight: normal;
+        }
+
+        .respondent-info {
+            padding: 24px;
+            text-align: left;
+        }
+
+        .respondent-info h2 {
+            margin: 0 0 20px;
+            font-size: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .info-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .info-field input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid rgba(100, 100, 100, 0.55);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-main);
+            font: inherit;
+        }
+
+        .info-field input:focus {
+            border-color: #555;
+            box-shadow: 0 0 0 3px rgba(70, 70, 70, 0.12);
+            outline: none;
+        }
+
+        .info-field input::placeholder {
+            color: #aaa;
+            opacity: 1;
+        }
+
+        .password-input-wrap {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-input-wrap input {
+            padding-right: 64px;
+        }
+
+        .password-visibility-toggle {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            padding: 5px 7px;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: #666;
+            font: inherit;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .password-visibility-toggle:hover {
+            background: rgba(80, 80, 80, 0.1);
+            color: #333;
+        }
+
+        .login-error {
+            min-height: 20px;
+            margin: 12px 0 0 86px;
+            color: #a12626;
+            font-size: 13px;
+        }
+
+        #login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 100vh;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 480px;
+            min-height: 620px;
+            padding: 32px;
+            box-sizing: border-box;
+            border: 2px solid var(--card-border);
+            border-radius: 28px;
+            background: linear-gradient(135deg, rgba(245, 245, 245, 0.84), rgba(205, 205, 205, 0.72));
+            box-shadow: 0 24px 60px rgba(50, 50, 50, 0.28);
+            backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .login-card h1 {
+            margin: 0;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 4px;
+        }
+
+        .login-description {
+            margin: 70px 0 46px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .login-card .info-grid {
+            grid-template-columns: 1fr;
+            gap: 26px;
+        }
+
+        .login-card #login-form {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+
+        .login-card .info-field {
+            display: grid;
+            grid-template-columns: 72px minmax(0, 1fr);
+            align-items: center;
+            gap: 14px;
+        }
+
+        .login-card .info-field label {
+            margin-bottom: 0;
+            text-align: right;
+        }
+
+        #login-button,
+        #password-change-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: var(--button-bg);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #login-button:hover,
+        #password-change-submit:hover {
+            background: var(--button-hover);
+            color: white;
+        }
+
+        #login-button:disabled,
+        #password-change-submit:disabled {
+            cursor: wait;
+            opacity: 0.65;
+        }
+
+        .login-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .login-actions .secondary-login-button {
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .secondary-login-button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #777;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.45);
+            color: #444;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .secondary-login-button:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .login-error.success {
+            color: #276738;
+        }
+
+        .password-dialog {
+            width: min(440px, calc(100% - 32px));
+            padding: 30px;
+            box-sizing: border-box;
+            border: 2px solid var(--card-border);
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(245, 245, 245, 0.97), rgba(205, 205, 205, 0.94));
+            color: var(--text-main);
+            box-shadow: 0 28px 70px rgba(20, 20, 20, 0.42);
+        }
+
+        .password-dialog::backdrop {
+            background: rgba(35, 35, 35, 0.58);
+            backdrop-filter: blur(5px);
+        }
+
+        .password-dialog h2 {
+            margin: 0;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        .password-dialog-description {
+            margin: 16px 0 26px;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .password-dialog .info-grid {
+            gap: 18px;
+        }
+
+        .password-dialog .info-field {
+            grid-template-columns: 110px minmax(0, 1fr);
+        }
+
+        .password-dialog .login-error {
+            margin: 14px 0 0;
+            text-align: center;
+        }
+
+        .password-dialog-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .respondent-summary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 20px 4px;
+            padding: 0;
+            border: none;
+            background: transparent;
+            color: #f4f4f4;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        #respondent-summary-text {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            width: 100%;
+        }
+
+        .summary-student {
+            justify-self: start;
+        }
+
+        .summary-name {
+            grid-column: 2;
+            justify-self: center;
+        }
+
+        #respondent-summary-text strong {
+            font-weight: normal;
+        }
+
+        .response-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin: 10px 0 28px;
+            padding: 14px 16px;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            background: rgba(238, 238, 238, 0.78);
+            text-align: left;
+        }
+
+        #load-latest-response {
+            flex: none;
+            padding: 10px 14px;
+            border: 1px solid #777;
+            border-radius: 9px;
+            background: var(--button-bg);
+            color: white;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        #load-latest-response:hover {
+            background: var(--button-hover);
+        }
+
+        #load-latest-response:disabled {
+            cursor: wait;
+            opacity: 0.65;
+        }
+
+        #loaded-version-info {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .answer-box {
+            position: relative;
+        }
+
+        .answer-box textarea {
+            width: 100%;
+            min-height: 360px;
+            padding: 12px 12px 30px;
+            box-sizing: border-box;
+            border: 1px solid rgba(100, 100, 100, 0.55);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-main);
+            font: inherit;
+            resize: vertical;
+        }
+
+        .answer-box textarea:focus {
+            border-color: #555;
+            box-shadow: 0 0 0 3px rgba(70, 70, 70, 0.12);
+            outline: none;
+        }
+
+        .answer-box textarea::placeholder {
+            color: #aaa;
+            opacity: 1;
+        }
+
+        .character-count {
+            position: absolute;
+            right: 12px;
+            bottom: 9px;
+            color: #777;
+            font-size: 13px;
+            pointer-events: none;
+        }
+        
+        #submit {
+            background-color: var(--button-bg);
+            color: white;
+            font-size: 25px;
+            font-family: Georgia, "Times New Roman", serif;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(50, 50, 50, 0.25);
+        }
+        
+        #submit:hover {
+            background-color: var(--button-hover);
+            color: white;
+        }
+
+        #submit:disabled {
+            cursor: wait;
+            opacity: 0.65;
+        }
+
+        .submit-status {
+            min-height: 24px;
+            margin: -15px 0 30px;
+            color: #555;
+        }
+
+        .submit-status.success {
+            color: #16833b;
+        }
+
+        .submit-status.error {
+            color: #c62828;
+        }
+        
+        @media (max-width: 550px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rightTab {
+                float: left;
+                width: 80%;
+            }
+            .labels {
+                text-align: left;
+                width: 100%;
+            }
+            #box-inner,
+            .box-inner {
+                height: auto;
+            }
+            #comments {
+                height: 30px;
+                width: 100%;
+            }
+
+            .password-dialog {
+                padding: 24px 20px;
+            }
+
+            .password-dialog .info-field {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .password-dialog .info-field label {
+                text-align: left;
+            }
+
+            .response-toolbar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="login-screen">
+        <div class="login-card">
+            <h1 id="login-title">설문 참여자 정보</h1>
+            <p id="login-description" class="login-description">학번, 이름, 비밀번호를 입력한 후 설문을 시작해 주세요.</p>
+            <form id="login-form" method="post" target="auth-response-frame">
+                <input type="hidden" id="login-action" name="action" value="login">
+                <div class="info-grid">
+                    <div class="info-field">
+                        <label id="student-id-label" for="login-student-id">학번</label>
+                        <input type="text" id="login-student-id" name="studentId" placeholder="학번을 입력해 주세요." autocomplete="off" required>
+                    </div>
+                    <div class="info-field">
+                        <label id="name-label" for="login-name">이름</label>
+                        <input type="text" id="login-name" name="respondentName" placeholder="이름을 입력해 주세요." autocomplete="name" required>
+                    </div>
+                    <div class="info-field">
+                        <label id="password-label" for="login-password">비밀번호</label>
+                        <div class="password-input-wrap">
+                            <input type="password" id="login-password" name="password" placeholder="비밀번호를 입력해 주세요." autocomplete="current-password" required>
+                            <button class="password-visibility-toggle" type="button" data-password-target="login-password" aria-pressed="false">보기</button>
+                        </div>
+                    </div>
+                </div>
+                <p id="login-error" class="login-error" role="alert" aria-live="polite"></p>
+                <div class="login-actions">
+                    <button id="change-password-toggle" class="secondary-login-button" type="button">비밀번호 변경</button>
+                    <button id="login-button" type="submit">설문 시작</button>
+                </div>
+
+                <dialog id="password-change-dialog" class="password-dialog">
+                    <h2 id="password-change-title">비밀번호 변경</h2>
+                    <p id="password-change-description" class="password-dialog-description">로그인창에 입력한 학번과 이름의 비밀번호를 변경합니다.</p>
+                    <div class="info-grid">
+                        <div class="info-field">
+                            <label id="current-password-label" for="current-password">현재 비밀번호</label>
+                            <div class="password-input-wrap">
+                                <input type="password" id="current-password" name="password" placeholder="현재 비밀번호를 입력해 주세요." autocomplete="current-password" disabled required>
+                                <button class="password-visibility-toggle" type="button" data-password-target="current-password" aria-pressed="false">보기</button>
+                            </div>
+                        </div>
+                        <div class="info-field">
+                            <label id="new-password-label" for="new-password">새 비밀번호</label>
+                            <div class="password-input-wrap">
+                                <input type="password" id="new-password" name="newPassword" placeholder="새 비밀번호를 입력해 주세요." autocomplete="new-password" minlength="4" disabled required>
+                                <button class="password-visibility-toggle" type="button" data-password-target="new-password" aria-pressed="false">보기</button>
+                            </div>
+                        </div>
+                        <div class="info-field">
+                            <label id="confirm-password-label" for="confirm-password">비밀번호 확인</label>
+                            <div class="password-input-wrap">
+                                <input type="password" id="confirm-password" placeholder="새 비밀번호를 다시 입력해 주세요." autocomplete="new-password" minlength="4" disabled required>
+                                <button class="password-visibility-toggle" type="button" data-password-target="confirm-password" aria-pressed="false">보기</button>
+                            </div>
+                        </div>
+                    </div>
+                    <p id="password-change-error" class="login-error" role="alert" aria-live="polite"></p>
+                    <div class="password-dialog-actions">
+                        <button id="password-change-submit" type="submit">비밀번호 변경 완료</button>
+                        <button id="cancel-password-change" class="secondary-login-button" type="button">취소</button>
+                    </div>
+                </dialog>
+            </form>
+            <iframe id="auth-response-frame" name="auth-response-frame" title="로그인 응답" hidden></iframe>
+        </div>
+    </div>
+
+    <div id="form-outer" hidden>
+        <h1 id="title">Organisation Survey Form</h1>
+
+        <p id="description" hidden>Survey Main purpose</p>
+        <form id="survey-form" action="" method="post" target="survey-response-frame">
+            <input type="hidden" id="form-student-id" name="studentId">
+            <input type="hidden" id="form-respondent-name" name="respondentName">
+            <input type="hidden" id="survey-action" name="action" value="submitSurvey">
+            <input type="hidden" id="auth-token" name="authToken">
+            <input type="hidden" id="answer-max-length" name="answerMaxLength" value="1000">
+            <input type="hidden" id="answer-max-length-1" name="answerMaxLength1" value="1000">
+            <input type="hidden" id="answer-max-length-2" name="answerMaxLength2" value="1000">
+            <input type="hidden" id="answer-max-length-3" name="answerMaxLength3" value="1000">
+            <input type="hidden" id="answer-max-length-4" name="answerMaxLength4" value="1000">
+            <input type="hidden" id="answer-max-length-5" name="answerMaxLength5" value="1000">
+            <input type="hidden" id="answer-copy-flag-1" name="answerCopy1" value="false">
+            <input type="hidden" id="answer-copy-flag-2" name="answerCopy2" value="false">
+            <input type="hidden" id="answer-copy-flag-3" name="answerCopy3" value="false">
+            <input type="hidden" id="answer-copy-flag-4" name="answerCopy4" value="false">
+            <input type="hidden" id="answer-copy-flag-5" name="answerCopy5" value="false">
+
+            <div class="respondent-summary">
+                <span id="respondent-summary-text">
+                    <span class="summary-student">학번: <strong id="summary-student-id"></strong></span>
+                    <span class="summary-name">이름: <strong id="summary-respondent-name"></strong></span>
+                </span>
+            </div>
+
+            <div class="response-toolbar">
+                <button id="load-latest-response" type="button">최근 답변 불러오기</button>
+                <span id="loaded-version-info" aria-live="polite">새 답변을 작성 중입니다.</span>
+            </div>
+
+            <fieldset hidden>
+                <legend>Choose one of these items:</legend>
+                <div class="rowTab">
+                    <div class="labels">
+                        *
+                        <label>Question 1?</label>
+                    </div>
+                    <div class="rightTab">
+                        <ul>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que1" value="1"> Option 1</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que1" value="2"> Option 2</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que1" value="3"> Option 3</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que1" value="4"> Option 4</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </fieldset>
+            <div id="box-inner" hidden>
+                <div class="rowTab">
+                    <div class="labels">
+                        <label>Question 2</label>
+                    </div>
+                    <div class="rightTab">
+                        <ul>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que2" value="1"> Option 1</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que2" value="2"> Option 2</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que2" value="3"> Option 3</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que2" value="4"> Sometimes</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="box-inner" hidden>
+                <div class="rowTab">
+                    <div class="labels">
+                        <label>Question 3</label>
+                    </div>
+                    <div class="rightTab">
+                        <ul>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que3" value="1"> Option 1</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que3" value="2"> Option 2</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que3" value="3"> Option 3</label>
+                            </li>
+                            <li class="radio">
+                                <label>
+                                    <input type="radio" name="que3" value="4"> Option 4</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="box-inner" hidden>
+                <div class="rowTab">
+                    <div class="labels">
+                        <label for="personality">Question 4</label>
+                    </div>
+                    <div class="rightTab">
+                        <ul>
+                            <li class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="que4" value="1"> Option 1</label>
+                                <li>
+                                    <li class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="que4" value="2"> Option 2</label>
+                                        <li>
+                                            <li class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="que4" value="3"> Option 3</label>
+                                                <li>
+                                                    <li class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="que4" value="4"> Option 4</label>
+                                                        <li>
+                                                            <li class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" name="que4" value="5"> Option 5</label>
+                                                                <li>
+                                                                    <li class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" name="que4" value="6"> Option 6</label>
+                                                                        <li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="box-inner">
+                <div class="rowTab long-answer">
+                    <label for="written-answer-1">Question 1:<span class="question-text" data-question-index="0">질문 불러오는 중...</span></label>
+                    <div class="answer-box">
+                        <textarea id="written-answer-1" name="writtenAnswer1" placeholder="답변을 입력해 주세요." maxlength="1000"></textarea>
+                        <span class="character-count" aria-live="polite">0 / 1000자</span>
+                    </div>
+                </div>
+            </div>
+            <div class="box-inner">
+                <div class="rowTab long-answer">
+                    <label for="written-answer-2">Question 2:<span class="question-text" data-question-index="1">질문 불러오는 중...</span></label>
+                    <div class="answer-box">
+                        <textarea id="written-answer-2" name="writtenAnswer2" placeholder="답변을 입력해 주세요." maxlength="1000"></textarea>
+                        <span class="character-count" aria-live="polite">0 / 1000자</span>
+                    </div>
+                </div>
+            </div>
+            <div class="box-inner">
+                <div class="rowTab long-answer">
+                    <label for="written-answer-3">Question 3:<span class="question-text" data-question-index="2">질문 불러오는 중...</span></label>
+                    <div class="answer-box">
+                        <textarea id="written-answer-3" name="writtenAnswer3" placeholder="답변을 입력해 주세요." maxlength="1000"></textarea>
+                        <span class="character-count" aria-live="polite">0 / 1000자</span>
+                    </div>
+                </div>
+            </div>
+            <div class="box-inner">
+                <div class="rowTab long-answer">
+                    <label for="written-answer-4">Question 4:<span class="question-text" data-question-index="3">질문 불러오는 중...</span></label>
+                    <div class="answer-box">
+                        <textarea id="written-answer-4" name="writtenAnswer4" placeholder="답변을 입력해 주세요." maxlength="1000"></textarea>
+                        <span class="character-count" aria-live="polite">0 / 1000자</span>
+                    </div>
+                </div>
+            </div>
+            <div class="box-inner">
+                <div class="rowTab long-answer">
+                    <label for="written-answer-5">Question 5:<span class="question-text" data-question-index="4">질문 불러오는 중...</span></label>
+                    <div class="answer-box">
+                        <textarea id="written-answer-5" name="writtenAnswer5" placeholder="답변을 입력해 주세요." maxlength="1000"></textarea>
+                        <span class="character-count" aria-live="polite">0 / 1000자</span>
+                    </div>
+                </div>
+            </div>
+
+        <button id="submit" type="submit">Submit</button>
+        <p id="submit-status" class="submit-status" role="status" aria-live="polite"></p>
+        </form>
+        <iframe id="survey-response-frame" name="survey-response-frame" title="설문 응답 처리" hidden></iframe>
+        <iframe id="clipboard-audit-frame" name="clipboard-audit-frame" title="복사 및 붙여넣기 시도 기록" hidden></iframe>
+    </div>
+    
+    <script>
+        window.surveyConfigPromise = fetch('questions.json', { cache: 'no-store' }).then(function (response) {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            return response.json();
+        });
+
+        async function loadQuestions() {
+            const questionElements = document.querySelectorAll('[data-question-index]');
+
+            try {
+                const data = await window.surveyConfigPromise;
+                const loginConfig = data.login || {};
+                const formConfig = data.form || {};
+                const questionConfig = data.question || {};
+
+                const textSettings = {
+                    'login-title': loginConfig.loginTitle,
+                    'login-description': loginConfig.loginDescription,
+                    'student-id-label': loginConfig.studentIdLabel,
+                    'name-label': loginConfig.nameLabel,
+                    'password-label': loginConfig.passwordLabel,
+                    'password-change-title': loginConfig.changePasswordTitle,
+                    'password-change-description': loginConfig.changePasswordDescription,
+                    'current-password-label': loginConfig.currentPasswordLabel,
+                    'new-password-label': loginConfig.newPasswordLabel,
+                    'confirm-password-label': loginConfig.confirmPasswordLabel,
+                    'login-button': loginConfig.startButtonText,
+                    'change-password-toggle': loginConfig.changePasswordButtonText,
+                    'password-change-submit': loginConfig.changePasswordSubmitText,
+                    'cancel-password-change': loginConfig.cancelButtonText,
+                    'title': formConfig.surveyTitle,
+                    'description': formConfig.surveyDescription,
+                    'load-latest-response': formConfig.loadLatestButtonText,
+                    'loaded-version-info': formConfig.newResponseMessage,
+                    'submit': formConfig.submitButtonText
+                };
+
+                Object.entries(textSettings).forEach(function ([id, value]) {
+                    if (value) {
+                        document.getElementById(id).textContent = value;
+                    }
+                });
+
+                const placeholderSettings = {
+                    'login-student-id': loginConfig.studentIdPlaceholder,
+                    'login-name': loginConfig.namePlaceholder,
+                    'login-password': loginConfig.passwordPlaceholder,
+                    'current-password': loginConfig.currentPasswordPlaceholder,
+                    'new-password': loginConfig.newPasswordPlaceholder,
+                    'confirm-password': loginConfig.confirmPasswordPlaceholder
+                };
+
+                Object.entries(placeholderSettings).forEach(function ([id, value]) {
+                    if (value) {
+                        document.getElementById(id).placeholder = value;
+                    }
+                });
+
+                document.querySelectorAll('.password-visibility-toggle').forEach(function (button) {
+                    button.dataset.showText = loginConfig.showPasswordText || '보기';
+                    button.dataset.hideText = loginConfig.hidePasswordText || '숨기기';
+                    const targetInput = document.getElementById(button.dataset.passwordTarget);
+                    button.textContent = targetInput.type === 'text'
+                        ? button.dataset.hideText
+                        : button.dataset.showText;
+                });
+
+                let largestAnswerMaxLength = 1;
+                document.querySelectorAll('.answer-box textarea').forEach(function (textarea, index) {
+                    const questionKey = `question${index + 1}`;
+                    const questionSettings = questionConfig[questionKey] || {};
+                    const answerMaxLength = Number(questionSettings.maxLength) > 0
+                        ? Math.floor(Number(questionSettings.maxLength))
+                        : 1000;
+                    if (questionConfig.answerPlaceholder) {
+                        textarea.placeholder = questionConfig.answerPlaceholder;
+                    }
+                    textarea.maxLength = answerMaxLength;
+                    largestAnswerMaxLength = Math.max(largestAnswerMaxLength, answerMaxLength);
+                    document.getElementById(`answer-max-length-${index + 1}`).value =
+                        String(answerMaxLength);
+                    const counter = textarea.parentElement.querySelector('.character-count');
+                    counter.textContent = `${textarea.value.length} / ${answerMaxLength}자`;
+                });
+                document.getElementById('answer-max-length').value =
+                    String(largestAnswerMaxLength);
+
+                document.getElementById('submit').dataset.defaultText =
+                    formConfig.submitButtonText || 'Submit';
+                document.getElementById('login-button').dataset.loginText =
+                    loginConfig.startButtonText || '설문 시작';
+                activeLoginConfig = loginConfig;
+                activeQuestionConfig = questionConfig;
+                setPasswordChangeMode(passwordChangeMode, true);
+
+                questionElements.forEach(function (element) {
+                    const index = Number(element.dataset.questionIndex);
+                    const questionKey = `question${index + 1}`;
+                    const questionSettings = questionConfig[questionKey];
+                    element.textContent = typeof questionSettings === 'string'
+                        ? questionSettings
+                        : (questionSettings?.text || '질문을 입력해 주세요.');
+                });
+            } catch (error) {
+                questionElements.forEach(function (element) {
+                    element.textContent = '질문을 불러오지 못했습니다.';
+                });
+                console.error('questions.json 로딩 실패:', error);
+            }
+        }
+
+        loadQuestions();
+
+        const loginScreen = document.getElementById('login-screen');
+        const surveyScreen = document.getElementById('form-outer');
+        const loginForm = document.getElementById('login-form');
+        const loginButton = document.getElementById('login-button');
+        const authResponseFrame = document.getElementById('auth-response-frame');
+        const loginAction = document.getElementById('login-action');
+        const studentIdInput = document.getElementById('login-student-id');
+        const respondentNameInput = document.getElementById('login-name');
+        const passwordInput = document.getElementById('login-password');
+        const passwordChangeDialog = document.getElementById('password-change-dialog');
+        const currentPasswordInput = document.getElementById('current-password');
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const passwordChangeSubmit = document.getElementById('password-change-submit');
+        const changePasswordToggle = document.getElementById('change-password-toggle');
+        const cancelPasswordChange = document.getElementById('cancel-password-change');
+        const loginError = document.getElementById('login-error');
+        const passwordChangeError = document.getElementById('password-change-error');
+        const passwordVisibilityButtons = document.querySelectorAll('.password-visibility-toggle');
+        let loginTimeoutId;
+        let activeLoginConfig = {};
+        let activeQuestionConfig = {};
+        let passwordChangeMode = false;
+
+        function setPasswordVisibility(button, visible) {
+            const targetInput = document.getElementById(button.dataset.passwordTarget);
+            targetInput.type = visible ? 'text' : 'password';
+            button.textContent = visible
+                ? (button.dataset.hideText || '숨기기')
+                : (button.dataset.showText || '보기');
+            button.setAttribute('aria-pressed', String(visible));
+        }
+
+        function resetPasswordVisibility(inputIds) {
+            passwordVisibilityButtons.forEach(function (button) {
+                if (!inputIds || inputIds.includes(button.dataset.passwordTarget)) {
+                    setPasswordVisibility(button, false);
+                }
+            });
+        }
+
+        function resetRequestButtons() {
+            loginButton.disabled = false;
+            loginButton.textContent = activeLoginConfig.startButtonText || '설문 시작';
+            passwordChangeSubmit.disabled = false;
+            passwordChangeSubmit.textContent =
+                activeLoginConfig.changePasswordSubmitText || '비밀번호 변경 완료';
+            cancelPasswordChange.disabled = false;
+        }
+
+        function showLoginMessage(message, type, target) {
+            const statusElement = target ||
+                (passwordChangeMode ? passwordChangeError : loginError);
+            statusElement.textContent = message || '';
+            statusElement.classList.toggle('success', type === 'success');
+        }
+
+        function setPasswordChangeMode(enabled, preserveMessage) {
+            const wasEnabled = passwordChangeMode;
+            passwordChangeMode = enabled;
+            loginAction.value = enabled ? 'changePassword' : 'login';
+            passwordInput.disabled = enabled;
+            currentPasswordInput.disabled = !enabled;
+            newPasswordInput.disabled = !enabled;
+            confirmPasswordInput.disabled = !enabled;
+
+            if (enabled) {
+                if (!wasEnabled) {
+                    currentPasswordInput.value = passwordInput.value;
+                }
+                passwordChangeSubmit.textContent =
+                    activeLoginConfig.changePasswordSubmitText || '비밀번호 변경 완료';
+                if (!passwordChangeDialog.open) {
+                    passwordChangeDialog.showModal();
+                }
+            } else {
+                if (passwordChangeDialog.open) {
+                    passwordChangeDialog.close();
+                }
+                currentPasswordInput.value = '';
+                newPasswordInput.value = '';
+                confirmPasswordInput.value = '';
+                resetPasswordVisibility([
+                    'current-password',
+                    'new-password',
+                    'confirm-password'
+                ]);
+            }
+
+            if (!preserveMessage) {
+                showLoginMessage('', null, enabled ? passwordChangeError : loginError);
+            }
+        }
+
+        function showLoginPage() {
+            document.getElementById('auth-token').value = '';
+            clearTimeout(loginTimeoutId);
+            resetRequestButtons();
+            passwordInput.value = '';
+            resetPasswordVisibility();
+            setPasswordChangeMode(false);
+            surveyScreen.hidden = true;
+            loginScreen.hidden = false;
+            studentIdInput.focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showSurveyForUser(result) {
+            if (!result.token) {
+                return false;
+            }
+
+            document.getElementById('form-student-id').value = result.studentId;
+            document.getElementById('form-respondent-name').value = result.respondentName;
+            document.getElementById('auth-token').value = result.token;
+            document.getElementById('summary-student-id').textContent = result.studentId;
+            document.getElementById('summary-respondent-name').textContent =
+                result.respondentName;
+            if (typeof window.resetSurveyResponseEditor === 'function') {
+                window.resetSurveyResponseEditor();
+            }
+
+            showLoginMessage('', null, loginError);
+            passwordInput.value = '';
+            loginScreen.hidden = true;
+            surveyScreen.hidden = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return true;
+        }
+
+        loginForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            if (passwordChangeMode && newPasswordInput.value !== confirmPasswordInput.value) {
+                showLoginMessage(
+                    activeLoginConfig.passwordMismatchMessage ||
+                    '새 비밀번호가 서로 일치하지 않습니다.',
+                    null,
+                    passwordChangeError
+                );
+                confirmPasswordInput.focus();
+                return;
+            }
+
+            try {
+                const config = await window.surveyConfigPromise;
+                activeLoginConfig = config.login || {};
+            } catch (error) {
+                showLoginMessage(
+                    '로그인 설정을 불러오지 못했습니다.',
+                    null,
+                    passwordChangeMode ? passwordChangeError : loginError
+                );
+                return;
+            }
+
+            const config = await window.surveyConfigPromise;
+            const googleScriptUrl = config.form?.googleScriptUrl || '';
+            if (!googleScriptUrl.startsWith('https://script.google.com/macros/s/') ||
+                !googleScriptUrl.endsWith('/exec')) {
+                showLoginMessage(
+                    'Apps Script 배포 URL을 확인해 주세요.',
+                    null,
+                    passwordChangeMode ? passwordChangeError : loginError
+                );
+                return;
+            }
+
+            const requestIsPasswordChange = passwordChangeMode;
+            const requestButton = requestIsPasswordChange
+                ? passwordChangeSubmit
+                : loginButton;
+            const requestStatus = requestIsPasswordChange
+                ? passwordChangeError
+                : loginError;
+            showLoginMessage(
+                requestIsPasswordChange
+                    ? '비밀번호를 변경하고 있습니다.'
+                    : (activeLoginConfig.loginCheckingMessage || '사용자 정보를 확인하고 있습니다.'),
+                null,
+                requestStatus
+            );
+            requestButton.disabled = true;
+            requestButton.textContent = requestIsPasswordChange ? '변경 중...' : '확인 중...';
+            if (requestIsPasswordChange) {
+                cancelPasswordChange.disabled = true;
+            }
+            loginForm.action = googleScriptUrl;
+            loginForm.submit();
+
+            clearTimeout(loginTimeoutId);
+            loginTimeoutId = setTimeout(function () {
+                resetRequestButtons();
+                showLoginMessage(
+                    activeLoginConfig.loginConnectionErrorMessage ||
+                    '로그인 서버에 연결하지 못했습니다.',
+                    null,
+                    requestStatus
+                );
+            }, 30000);
+        });
+
+        window.addEventListener('message', function (event) {
+            let messageHostname = '';
+            try {
+                messageHostname = new URL(event.origin).hostname;
+            } catch (error) {
+                return;
+            }
+
+            const isAppsScriptOrigin = event.origin === 'https://script.google.com' ||
+                messageHostname.endsWith('.googleusercontent.com');
+            if (!isAppsScriptOrigin ||
+                !['survey-login-result', 'survey-password-change-result'].includes(event.data?.type)) {
+                return;
+            }
+
+            clearTimeout(loginTimeoutId);
+            resetRequestButtons();
+
+            const result = event.data;
+            if (result.type === 'survey-password-change-result') {
+                if (!result.success) {
+                    setPasswordChangeMode(true, true);
+                    showLoginMessage(
+                        result.message || '비밀번호를 변경하지 못했습니다.',
+                        null,
+                        passwordChangeError
+                    );
+                    currentPasswordInput.select();
+                    return;
+                }
+
+                passwordInput.value = '';
+                setPasswordChangeMode(false, true);
+                if (showSurveyForUser(result)) {
+                    return;
+                }
+
+                showLoginMessage(
+                    activeLoginConfig.passwordChangedMessage || result.message ||
+                    '비밀번호가 변경되었습니다. 새 비밀번호로 로그인해 주세요.',
+                    'success',
+                    loginError
+                );
+                passwordInput.focus();
+                return;
+            }
+
+            if (!result.success) {
+                showLoginMessage(
+                    result.message || activeLoginConfig.incorrectPasswordMessage ||
+                    '로그인 정보가 올바르지 않습니다.',
+                    null,
+                    loginError
+                );
+                passwordInput.select();
+                return;
+            }
+
+            if (result.passwordWasReset) {
+                setPasswordChangeMode(true, true);
+                showLoginMessage(
+                    activeLoginConfig.passwordResetRequiredMessage ||
+                    '초기 비밀번호를 새로운 비밀번호로 변경해 주세요.',
+                    null,
+                    passwordChangeError
+                );
+                newPasswordInput.focus();
+                return;
+            }
+
+            if (!showSurveyForUser(result)) {
+                showLoginMessage(
+                    '로그인 세션을 만들지 못했습니다. Apps Script를 새 버전으로 배포해 주세요.',
+                    null,
+                    loginError
+                );
+            }
+        });
+
+        changePasswordToggle.addEventListener('click', function () {
+            if (!studentIdInput.value.trim() || !respondentNameInput.value.trim()) {
+                showLoginMessage(
+                    activeLoginConfig.passwordIdentityRequiredMessage ||
+                    '학번과 이름을 먼저 입력해 주세요.',
+                    null,
+                    loginError
+                );
+                (!studentIdInput.value.trim() ? studentIdInput : respondentNameInput).focus();
+                return;
+            }
+
+            setPasswordChangeMode(true);
+            currentPasswordInput.focus();
+        });
+        cancelPasswordChange.addEventListener('click', function () {
+            setPasswordChangeMode(false);
+            passwordInput.focus();
+        });
+        passwordChangeDialog.addEventListener('cancel', function (event) {
+            event.preventDefault();
+            if (passwordChangeSubmit.disabled) {
+                return;
+            }
+            setPasswordChangeMode(false);
+            passwordInput.focus();
+        });
+        passwordVisibilityButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const isVisible = button.getAttribute('aria-pressed') === 'true';
+                setPasswordVisibility(button, !isVisible);
+            });
+        });
+
+        async function recordClipboardAttempt(questionNumber, clipboardAction) {
+            try {
+                const config = await window.surveyConfigPromise;
+                const googleScriptUrl = config.form?.googleScriptUrl || '';
+                const authToken = document.getElementById('auth-token').value;
+                if (!googleScriptUrl || !authToken) {
+                    return;
+                }
+
+                const auditForm = document.createElement('form');
+                auditForm.method = 'post';
+                auditForm.action = googleScriptUrl;
+                auditForm.target = 'clipboard-audit-frame';
+                auditForm.hidden = true;
+
+                [
+                    ['action', 'logClipboardAttempt'],
+                    ['authToken', authToken],
+                    ['questionNumber', String(questionNumber)],
+                    ['clipboardAction', clipboardAction]
+                ].forEach(function ([name, value]) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    auditForm.appendChild(input);
+                });
+
+                document.body.appendChild(auditForm);
+                HTMLFormElement.prototype.submit.call(auditForm);
+                auditForm.remove();
+            } catch (error) {
+                console.error('복사 및 붙여넣기 시도 기록 실패:', error);
+            }
+        }
+
+        document.querySelectorAll('.answer-box').forEach(function (answerBox, index) {
+            const writtenAnswer = answerBox.querySelector('textarea');
+            const characterCount = answerBox.querySelector('.character-count');
+            const copyFlag = document.getElementById(`answer-copy-flag-${index + 1}`);
+
+            function blockClipboardAction(event, recordAttempt) {
+                event.preventDefault();
+                if (recordAttempt) {
+                    copyFlag.value = 'true';
+                    const clipboardAction = event.type === 'keydown'
+                        ? `shortcut-${event.key.toLowerCase()}`
+                        : event.type;
+                    recordClipboardAttempt(index + 1, clipboardAction);
+                }
+                const status = document.getElementById('submit-status');
+                status.textContent = activeQuestionConfig.clipboardBlockedMessage ||
+                    '답변 칸에서는 복사 및 붙여넣기를 사용할 수 없습니다.';
+                status.className = 'submit-status error';
+            }
+
+            writtenAnswer.addEventListener('input', function () {
+                const maxLength = writtenAnswer.maxLength > 0
+                    ? writtenAnswer.maxLength
+                    : 1000;
+                characterCount.textContent =
+                    `${writtenAnswer.value.length} / ${maxLength}자`;
+            });
+            ['copy', 'cut', 'paste', 'drop', 'dragstart', 'contextmenu'].forEach(function (eventName) {
+                writtenAnswer.addEventListener(eventName, function (event) {
+                    const recordAttempt = ['copy', 'cut', 'paste', 'drop'].includes(eventName);
+                    blockClipboardAction(event, recordAttempt);
+                });
+            });
+            writtenAnswer.addEventListener('keydown', function (event) {
+                const clipboardShortcut = (event.ctrlKey || event.metaKey) &&
+                    ['c', 'v', 'x'].includes(event.key.toLowerCase());
+                if (clipboardShortcut) {
+                    blockClipboardAction(event, true);
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="link_gform.js"></script>
+</body>
+
+</html>

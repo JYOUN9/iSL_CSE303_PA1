@@ -1397,15 +1397,14 @@
             };
         }
 
-        function syncAnswerIntegrityBaselines() {
+        const syncAnswerIntegrityBaselines = function () {
             document.querySelectorAll('.answer-box textarea').forEach(function (textarea) {
                 const state = answerIntegrityStates.get(textarea);
                 if (state) {
                     state.value = textarea.value;
                 }
             });
-        }
-        window.syncAnswerIntegrityBaselines = syncAnswerIntegrityBaselines;
+        };
 
         ['beforeinput', 'input'].forEach(function (eventName) {
             document.addEventListener(eventName, function (event) {

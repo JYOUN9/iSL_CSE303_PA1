@@ -63,8 +63,8 @@ function resetSurveyEditor() {
   surveyForm.querySelectorAll('textarea').forEach(function (textarea) {
     textarea.value = '';
   });
-  if (typeof window.syncAnswerIntegrityBaselines === 'function') {
-    window.syncAnswerIntegrityBaselines();
+  if (typeof syncAnswerIntegrityBaselines === 'function') {
+    syncAnswerIntegrityBaselines();
   }
   updateCopyFlags([]);
   updateCharacterCounts();
@@ -199,8 +199,8 @@ window.addEventListener('message', function (event) {
   surveyForm.querySelectorAll('.answer-box textarea').forEach(function (textarea, index) {
     textarea.value = answers[index] || '';
   });
-  if (typeof window.syncAnswerIntegrityBaselines === 'function') {
-    window.syncAnswerIntegrityBaselines();
+  if (typeof syncAnswerIntegrityBaselines === 'function') {
+    syncAnswerIntegrityBaselines();
   }
   updateCharacterCounts();
   hasSubmittedVersion = true;

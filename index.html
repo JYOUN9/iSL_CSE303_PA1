@@ -1359,11 +1359,13 @@
 
         function flagAndRecordClipboardActivity(questionNumber, clipboardAction) {
             const actualTransfer = isActualAnswerTransfer(clipboardAction);
-            if (actualTransfer) {
-                const copyFlag = document.getElementById(`answer-copy-flag-${questionNumber}`);
-                if (copyFlag) {
-                    copyFlag.value = 'true';
-                }
+            if (!actualTransfer) {
+                return;
+            }
+
+            const copyFlag = document.getElementById(`answer-copy-flag-${questionNumber}`);
+            if (copyFlag) {
+                copyFlag.value = 'true';
             }
 
             const now = Date.now();
@@ -1405,27 +1407,6 @@
         }
         window.syncAnswerIntegrityBaselines = syncAnswerIntegrityBaselines;
 
-        document.addEventListener('keydown', function (event) {
-            const answerDetails = getAnswerDetails(event.target);
-            const key = String(event.key || '').toLowerCase();
-            if (answerDetails && (event.ctrlKey || event.metaKey) &&
-                ['c', 'v', 'x'].includes(key)) {
-                flagAndRecordClipboardActivity(
-                    answerDetails.questionNumber,
-                    `shortcut-${key}`
-                );
-            }
-        }, true);
-
-        ['copy', 'cut', 'paste', 'drop'].forEach(function (eventName) {
-            document.addEventListener(eventName, function (event) {
-                const answerDetails = getAnswerDetails(event.target);
-                if (answerDetails) {
-                    flagAndRecordClipboardActivity(answerDetails.questionNumber, eventName);
-                }
-            }, true);
-        });
-
         ['beforeinput', 'input'].forEach(function (eventName) {
             document.addEventListener(eventName, function (event) {
                 const answerDetails = getAnswerDetails(event.target);
@@ -1466,14 +1447,8 @@
             const characterCount = answerBox.querySelector('.character-count');
             answerIntegrityStates.set(writtenAnswer, { value: writtenAnswer.value });
 
-            function blockClipboardAction(event, recordAttempt) {
+            function blockClipboardAction(event) {
                 event.preventDefault();
-                if (recordAttempt) {
-                    const clipboardAction = event.type === 'keydown'
-                        ? `shortcut-${event.key.toLowerCase()}`
-                        : event.type;
-                    flagAndRecordClipboardActivity(index + 1, clipboardAction);
-                }
             }
 
             writtenAnswer.addEventListener('input', function () {
@@ -1485,15 +1460,14 @@
             });
             ['copy', 'cut', 'paste', 'drop', 'dragstart', 'contextmenu'].forEach(function (eventName) {
                 writtenAnswer.addEventListener(eventName, function (event) {
-                    const recordAttempt = ['copy', 'cut', 'paste', 'drop'].includes(eventName);
-                    blockClipboardAction(event, recordAttempt);
+                    blockClipboardAction(event);
                 });
             });
             writtenAnswer.addEventListener('keydown', function (event) {
                 const clipboardShortcut = (event.ctrlKey || event.metaKey) &&
                     ['c', 'v', 'x'].includes(event.key.toLowerCase());
                 if (clipboardShortcut) {
-                    blockClipboardAction(event, true);
+                    blockClipboardAction(event);
                 }
             });
         });

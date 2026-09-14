@@ -31,7 +31,7 @@
     "startButtonText": "설문 시작"
   },
   "form": {
-    "googleScriptUrl": "https://script.google.com/macros/s/AKfycbwA9_lzQ_sAKcBWkc0-gYrWyHM1upFDcw99Wf4khZnY2tDUlfSzK-tFK-ma9qzvdDJr/exec",
+    "googleScriptUrl": "https://script.google.com/macros/s/AKfycbwXPTAtx3TeughQK8SFyOEdYHTtm5Jpt2MrSChBcg9D1zBYFJTBkwdEouOhlVsiNO5T0A/exec",
     "surveyTitle": "딥러닝개론 Project Assignment 1",
     "loadLatestButtonText": "제출본 불러오기",
     "newResponseMessage": "새 답변을 작성 중입니다.",

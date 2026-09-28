@@ -9,16 +9,12 @@ const HEADERS = [
   'Timestamp',
   'Answer 1',
   'Answer 2',
-  'Answer 3',
-  'Answer 4',
-  'Answer 5'
+  'Answer 3'
 ];
 const ANSWER_KEYS = [
   'writtenAnswer1',
   'writtenAnswer2',
-  'writtenAnswer3',
-  'writtenAnswer4',
-  'writtenAnswer5'
+  'writtenAnswer3'
 ];
 const USERS_SHEET_NAME = 'Users';
 const USER_HEADERS = ['학번', '이름', '비밀번호', '활성화', '초기화 여부'];
@@ -45,8 +41,8 @@ function setup() {
     sheet = spreadsheet.insertSheet(SHEET_NAME);
   }
 
-  // 이전 9개 열 헤더(이메일 포함)가 남지 않도록 제목 행만 초기화합니다.
-  sheet.getRange(HEADER_ROW, START_COLUMN, 1, 9).clearContent();
+  // 이전 5문항 형식의 헤더가 남지 않도록 기존 범위의 제목 행을 초기화합니다.
+  sheet.getRange(HEADER_ROW, START_COLUMN, 1, 8).clearContent();
   sheet
     .getRange(HEADER_ROW, START_COLUMN, 1, HEADERS.length)
     .setValues([HEADERS]);
